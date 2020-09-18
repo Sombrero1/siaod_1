@@ -2,6 +2,7 @@ package ru.mirea;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FamilyOfQueues {
     ArrayList<Queue> queues;
@@ -40,7 +41,7 @@ public class FamilyOfQueues {
 
 
         for (int i = 0; i < allNumbers.length; i++) {
-           allNumbers[i]=sort(allNumbers[i]);
+            allNumbers[i]=edSort(allNumbers[i]);
         }
 
 
@@ -53,37 +54,44 @@ public class FamilyOfQueues {
          for (int j = 0; j < allNumbers[i].length ; j++) {
              System.out.print(allNumbers[i][j] +" ");
 
-
          }
          System.out.println();
 
      }
  }
 
-    public  int[] sort(int[] old) {
-        for (int shift = Integer.SIZE - 1; shift > -1; shift--) {
-            int[] tmp = new int[old.length];
-            int j = 0;
+ private int [] edSort(int[] input){
+      int[]b=Arrays.copyOf(input,input.length);
 
-            for (int i = 0; i < old.length; i++) {
-                boolean move = old[i] << shift >= 0;
+     ArrayList<Integer>[] buckets = new ArrayList[10]; //куда подвешивать числа
+     for (int i = 0; i < buckets.length; i++) {
+         buckets[i] = new ArrayList<Integer>();
+     }
+
+     int  divisor = 1;//делитель
+
+    label:
+     while (true) {
 
 
-                if (shift == 0 ? !move : move) {
-                    tmp[j] = old[i];
-                    j++;
-                } else {
-                    old[i - j] = old[i];
-                }
-            }
+         for (int i=0; i<b.length;i++) {
+             int tmp = b[i] / divisor;
+             buckets[tmp % 10].add(b[i]);//подвешимаем числа
+         }
+         for (int l = 0,k=0; l < 10; l++) {
+             for (int i : buckets[l]) { //проходим по числам с разрядами 0,1,2,...
+                 b[k++] = i; //сортируем исходный массив по соотвествующим разрядам
+             }
+             if(buckets[0].size()==b.length) break label; // если все числа подвешены к 0
+             buckets[l].clear(); //убираем подвешенные цифры
+         }
 
-            for (int i = j; i < tmp.length; i++) {
-                tmp[i] = old[i - j];
-            }
+         divisor *= 10;
 
-            old = tmp;
-        }
+     }
 
-        return old;
-    }
+
+    return b;
+ }
+
 }
