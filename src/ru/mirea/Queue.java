@@ -8,12 +8,15 @@ public class Queue {
     private int elements=0;
     private int begin;
     private int end;
-    private int pointer;//ячейка массива
+
+
     Queue(int quantity){
         queue_mass=new int[quantity];
         begin=-1;//начало очереди. Обновляется при извлечении poll
         end=-1; //конец очереди. Обновляется при добавление add
     }
+
+
 
     public void generate(){
         Random rand= new Random();
@@ -38,6 +41,12 @@ public class Queue {
         begin=(begin+1)%queue_mass.length;
         return queue_mass[begin];
     }
+
+    public void del(){
+        elements--;
+        begin=(begin+1)%queue_mass.length;
+    }
+
     public boolean isFull(){
         if(elements!=queue_mass.length) return false;
         else return true;

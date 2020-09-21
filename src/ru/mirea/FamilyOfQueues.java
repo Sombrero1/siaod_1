@@ -68,8 +68,11 @@ public class FamilyOfQueues {
          buckets[i] = new ArrayList<Integer>();
      }
 
-     int  divisor = 1;//делитель
+     int  divisor = 1,max=0;//делитель
 
+     for (int i = 0; i < b.length ; i++) {
+         max=Integer.max(b[i],max);
+     }
     label:
      while (true) {
 
@@ -77,12 +80,15 @@ public class FamilyOfQueues {
          for (int i=0; i<b.length;i++) {
              int tmp = b[i] / divisor;
              buckets[tmp % 10].add(b[i]);//подвешимаем числа
+
+
+
          }
          for (int l = 0,k=0; l < 10; l++) {
              for (int i : buckets[l]) { //проходим по числам с разрядами 0,1,2,...
                  b[k++] = i; //сортируем исходный массив по соотвествующим разрядам
              }
-             if(buckets[0].size()==b.length) break label; // если все числа подвешены к 0
+             if(buckets[0].size()==b.length && max/divisor==0) break label; // если все числа подвешены к 0
              buckets[l].clear(); //убираем подвешенные цифры
          }
 
